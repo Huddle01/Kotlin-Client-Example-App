@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="area_bg">#22ffffff</color>
+
+    <color name="text_color">#bfffffff</color>
+    <color name="text_u_color">#80ffffff</color>
+
+    <color name="trans_bg">#80243B55</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>
