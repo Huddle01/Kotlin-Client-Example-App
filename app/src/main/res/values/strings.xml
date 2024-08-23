@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Kotlin-Client-Example-App</string>
+    <string name="enter_room_id_here">enter room id here➡️</string>
+    <string name="huddle01_kotlin">Huddle01 Kotlin 🚀</string>
+    <string name="enter_token_here">enter token here 🔑</string>
+    <string name="join">Join</string>
 </resources>
