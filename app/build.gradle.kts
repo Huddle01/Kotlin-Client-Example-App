@@ -26,6 +26,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -33,6 +34,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+//    viewBinding.enable = true
 }
 
 dependencies {
@@ -45,4 +47,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // huddle01 kotlin sdk
+    implementation(libs.kotlin.client)
+
 }
