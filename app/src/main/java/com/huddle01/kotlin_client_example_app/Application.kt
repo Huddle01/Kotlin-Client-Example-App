@@ -1,11 +1,12 @@
 package com.huddle01.kotlin_client_example_app
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Application
+import com.huddle01.kotlin_client.HuddleClient
 
-class Application : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+class Application : Application() {
+    private lateinit var huddleClient: HuddleClient
+    override fun onCreate() {
+        super.onCreate()
+        huddleClient = HuddleClient("YOUR_PROJECT_ID", this)
     }
 }
