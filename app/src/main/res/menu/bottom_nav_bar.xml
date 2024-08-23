@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mic"
+        android:title="Mic"
+        android:icon="@drawable/icon_mic_off"/>
+    <item
+        android:id="@+id/cam"
+        android:title="Cam"
+        android:icon="@drawable/icon_video_off"/>
+    <item
+        android:id="@+id/leave"
+        android:title="Leave"
+        android:icon="@drawable/icon_leave"/>
+</menu>
