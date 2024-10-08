@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -55,7 +54,4 @@ dependencies {
 
     // huddle01 kotlin sdk
     implementation(libs.kotlin.client)
-    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
-    implementation("com.google.firebase:firebase-analytics")
-
 }
