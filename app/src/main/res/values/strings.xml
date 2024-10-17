@@ -4,4 +4,5 @@
     <string name="huddle01_kotlin">Huddle01 Kotlin 🚀</string>
     <string name="enter_token_here">enter token here 🔑</string>
     <string name="join">Join</string>
+    <string name="send_message">Send Message</string>
 </resources>
