@@ -9,4 +9,6 @@
     <string name="cam">Cam</string>
     <string name="leave">Leave</string>
     <string name="switch_cam">Switch Cam</string>
+    <string name="peers">Peers</string>
+    <string name="_0">0</string>
 </resources>

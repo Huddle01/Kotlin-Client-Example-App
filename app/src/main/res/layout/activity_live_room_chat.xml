@@ -18,8 +18,39 @@
             android:layout_above="@id/message_input_layout"
             android:gravity="center" />
 
+
         <LinearLayout
             android:id="@+id/icon_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground"
+            >
+
+            <ImageView
+                android:id="@+id/peers_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/icon_peers"
+                android:contentDescription="@string/peers" />
+
+            <TextView
+                android:id="@+id/peers_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/_0"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:textColor="#FFF" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/cam_functions_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
