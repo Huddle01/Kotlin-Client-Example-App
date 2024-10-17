@@ -19,6 +19,56 @@
             android:gravity="center" />
 
         <LinearLayout
+            android:id="@+id/icon_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@id/message_input_layout"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp">
+
+            <ImageButton
+                android:id="@+id/btnMic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/mic"
+                android:padding="8dp"
+                android:src="@drawable/icon_mic_off" />
+
+            <ImageButton
+                android:id="@+id/btnCam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/cam"
+                android:padding="8dp"
+                android:src="@drawable/icon_video_off" />
+
+            <ImageButton
+                android:id="@+id/btnSwitchCam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/switch_cam"
+                android:padding="8dp"
+                android:src="@drawable/switch_cam" />
+
+            <ImageButton
+                android:id="@+id/btnLeave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/leave"
+                android:padding="8dp"
+                android:src="@drawable/icon_leave" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/message_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,6 +83,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:autofillHints=""
                 android:hint="@string/send_message"
                 android:textColor="#000000"
                 android:inputType="text"
