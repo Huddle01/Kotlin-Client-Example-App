@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -40,12 +41,23 @@ class LiveRoomChatActivity : AppCompatActivity() {
         binding.roomStore = store
         binding.lifecycleOwner = this
 
-        if (intent.getBooleanExtra("isMicOn", false)) {
-            lifecycleScope.launch { huddleClient.localPeer.enableAudio() }
-        }
+        when {
+            huddleClient.localPeer.role == "host"  || huddleClient.localPeer.role == "coHost" -> {
+                when {
+                    intent.getBooleanExtra("isMicOn", false) -> {
+                        lifecycleScope.launch { huddleClient.localPeer.enableAudio() }
+                    }
+                    intent.getBooleanExtra("isCamOn", false) -> {
+                        lifecycleScope.launch { huddleClient.localPeer.enableVideo(binding.camView) }
+                    }
+                }
+            }
+            else -> {
+                binding.btnMic.visibility = View.GONE
+                binding.btnCam.visibility = View.GONE
+                binding.btnSwitchCam.visibility = View.GONE
 
-        if (intent.getBooleanExtra("isCamOn", false)) {
-            lifecycleScope.launch { huddleClient.localPeer.enableVideo(binding.camView) }
+            }
         }
     }
 

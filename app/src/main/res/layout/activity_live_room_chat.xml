@@ -61,6 +61,7 @@
             android:layout_marginBottom="16dp">
 
             <ImageButton
+                android:visibility="visible"
                 android:id="@+id/btnMic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,6 +71,7 @@
                 android:src="@drawable/icon_mic_off" />
 
             <ImageButton
+                android:visibility="visible"
                 android:id="@+id/btnCam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -80,6 +82,7 @@
                 android:src="@drawable/icon_video_off" />
 
             <ImageButton
+                android:visibility="visible"
                 android:id="@+id/btnSwitchCam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
