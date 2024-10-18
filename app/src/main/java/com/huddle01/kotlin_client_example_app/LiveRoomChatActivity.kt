@@ -11,13 +11,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.huddle01.kotlin_client.live_data.store.RoomStore
+import com.huddle01.kotlin_client.live_data.store.models.Peer
+import com.huddle01.kotlin_client.utils.PeerConnectionUtils
 import com.huddle01.kotlin_client_example_app.databinding.ActivityLiveRoomChatBinding
 import kotlinx.coroutines.launch
+import org.webrtc.VideoTrack
 import timber.log.Timber
 
 class LiveRoomChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLiveRoomChatBinding
     private lateinit var store: RoomStore
+    private lateinit var peerIds: List<Peer>
     private var isPermissionGranted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,31 +44,39 @@ class LiveRoomChatActivity : AppCompatActivity() {
         store = huddleClient.localPeer.store
         binding.roomStore = store
         binding.lifecycleOwner = this
+        peerIds = store.peers.value?.allPeers ?: emptyList()
 
-        when {
-            huddleClient.localPeer.role == "host"  || huddleClient.localPeer.role == "coHost" -> {
-                when {
-                    intent.getBooleanExtra("isMicOn", false) -> {
-                        lifecycleScope.launch { huddleClient.localPeer.enableAudio() }
-                    }
-                    intent.getBooleanExtra("isCamOn", false) -> {
-                        lifecycleScope.launch { huddleClient.localPeer.enableVideo(binding.camView) }
-                    }
-                }
+        if (huddleClient.localPeer.role in listOf("host", "coHost")) {
+            val isMicOn = intent.getBooleanExtra("isMicOn", false)
+            val isCamOn = intent.getBooleanExtra("isCamOn", false)
+            lifecycleScope.launch {
+                if (isMicOn) huddleClient.localPeer.enableAudio()
+                if (isCamOn) huddleClient.localPeer.enableVideo(binding.camView)
             }
-            else -> {
-                binding.btnMic.visibility = View.GONE
-                binding.btnCam.visibility = View.GONE
-                binding.btnSwitchCam.visibility = View.GONE
+        } else {
+            binding.btnMic.visibility = View.GONE
+            binding.btnCam.visibility = View.GONE
+            binding.btnSwitchCam.visibility = View.GONE
 
-            }
         }
     }
 
     private fun observeRoomData() {
         store.peers.observe(this) {
-            val peerCount = it.allPeers.count()
-            binding.peersCount.text = peerCount.toString()
+            peerIds = it.allPeers
+            binding.peersCount.text = peerIds.count().toString()
+
+            // remote peer render condition
+            peerIds.firstOrNull {
+                (it.role in listOf("host", "coHost")) && it.consumers.isNotEmpty()
+            }?.consumers?.values?.firstOrNull { it.kind == "video" }?.let { consumer ->
+                binding.camView.apply {
+                    init(PeerConnectionUtils.eglContext, null)
+                    setMirror(true)
+                    (consumer.track as? VideoTrack)?.addSink(this)
+                }
+            }
+
         }
     }
 
