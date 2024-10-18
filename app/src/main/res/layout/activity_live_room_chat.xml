@@ -1,6 +1,8 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="roomStore"
             type="com.huddle01.kotlin_client.live_data.store.RoomStore" />
@@ -27,8 +29,7 @@
             android:layout_alignParentEnd="true"
             android:layout_margin="16dp"
             android:gravity="center"
-            android:background="?attr/selectableItemBackground"
-            >
+            android:background="?attr/selectableItemBackground">
 
             <ImageView
                 android:id="@+id/peers_icon"
@@ -45,7 +46,7 @@
                 android:text="@string/_0"
                 android:textStyle="bold"
                 android:textSize="30sp"
-                android:textColor="#FFF" />
+                android:textColor="#fb6b4b" />
         </LinearLayout>
 
 
@@ -96,7 +97,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/leave"
                 android:padding="8dp"
-                android:src="@drawable/icon_leave" />
+                android:src="@drawable/icon_leave"
+                app:tint="#5d261a" />
         </LinearLayout>
 
         <LinearLayout
@@ -116,7 +118,6 @@
                 android:layout_weight="1"
                 android:autofillHints=""
                 android:hint="@string/send_message"
-                android:textColor="#000000"
                 android:inputType="text"
                 android:textSize="16sp"
                 android:padding="12dp"
