@@ -16,6 +16,7 @@
         android:layout_marginStart="35dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="35dp"
+        android:autofillHints=""
         android:background="@color/material_dynamic_tertiary60"
         android:gravity="center"
         android:hint="@string/enter_room_id_here"
@@ -44,12 +45,40 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="214dp"
+        android:layout_marginTop="192dp"
         android:layout_marginEnd="35dp"
         android:background="@color/material_dynamic_tertiary60"
         android:gravity="center"
         android:hint="@string/enter_token_here"
         android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/token"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="0dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchMic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="18sp"
+            android:text="@string/mic" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="18sp"
+            android:text="@string/cam" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnConnect"
@@ -57,10 +86,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/token"
         android:layout_marginStart="124dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="119dp"
         android:layout_marginEnd="125dp"
         android:layout_marginBottom="235dp"
-        android:text="@string/join"
-        android:background="#40B5AD" />
+        android:background="#40B5AD"
+        android:text="@string/join" />
+
 
 </RelativeLayout>
