@@ -133,7 +133,7 @@ class LiveRoomChatActivity : AppCompatActivity() {
                 huddleClient.leaveRoom()
             }
         }
-        startActivity(Intent(this, HomeActivity::class.java))
+        startActivity(Intent(this, Application::class.java))
         finish()
     }
 
