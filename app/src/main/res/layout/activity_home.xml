@@ -52,34 +52,6 @@
         android:hint="@string/enter_token_here"
         android:textSize="14sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/token"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="31dp"
-        android:layout_marginEnd="0dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchMic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="18sp"
-            android:text="@string/mic" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchCamera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="18sp"
-            android:text="@string/cam" />
-
-    </LinearLayout>
-
     <Button
         android:id="@+id/btnConnect"
         android:layout_width="141dp"

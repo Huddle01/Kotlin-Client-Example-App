@@ -25,10 +25,7 @@ class HomeActivity : AppCompatActivity() {
 
         store.roomInfo.observe(this) { roomInfo ->
             if (roomInfo.connectionState == RoomStates.CONNECTED) {
-                val intent = Intent(this@HomeActivity, LiveRoomChatActivity::class.java).apply {
-                    putExtra("isMicOn", binding.switchMic.isChecked)
-                    putExtra("isCamOn", binding.switchCamera.isChecked)
-                }
+                val intent = Intent(this@HomeActivity, LiveRoomChatActivity::class.java)
                 startActivity(intent)
             }
         }
