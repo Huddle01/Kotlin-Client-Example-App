@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.huddle01.kotlin_client.HuddleClient
 import com.huddle01.kotlin_client.live_data.store.RoomStore
 import com.huddle01.kotlin_client.live_data.store.models.Peer
 import com.huddle01.kotlin_client.utils.PeerConnectionUtils
@@ -22,7 +23,11 @@ class LiveRoomChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLiveRoomChatBinding
     private lateinit var store: RoomStore
     private lateinit var peerIds: List<Peer>
-    private var isPermissionGranted = false
+    private lateinit var huddleClient: HuddleClient
+
+    private var isMicOn: Boolean = false
+    private var isCamOn: Boolean = false
+    private var isPermissionGranted: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,43 +45,39 @@ class LiveRoomChatActivity : AppCompatActivity() {
     }
 
     private fun initializeHuddleClient() {
-        val huddleClient = (applicationContext as Application).huddleClient
+        huddleClient = (applicationContext as Application).huddleClient
         store = huddleClient.localPeer.store
         binding.roomStore = store
         binding.lifecycleOwner = this
         peerIds = store.peers.value?.allPeers ?: emptyList()
 
         if (huddleClient.localPeer.role in listOf("host", "coHost")) {
-            val isMicOn = intent.getBooleanExtra("isMicOn", false)
-            val isCamOn = intent.getBooleanExtra("isCamOn", false)
             lifecycleScope.launch {
-                if (isMicOn) huddleClient.localPeer.enableAudio()
-                if (isCamOn) huddleClient.localPeer.enableVideo(binding.camView)
+                huddleClient.localPeer.enableAudio()
+                huddleClient.localPeer.enableVideo(binding.camView)
             }
         } else {
             binding.btnMic.visibility = View.GONE
             binding.btnCam.visibility = View.GONE
             binding.btnSwitchCam.visibility = View.GONE
-
         }
     }
 
     private fun observeRoomData() {
-        store.peers.observe(this) {
+        store.peers.observe(this) { it ->
             peerIds = it.allPeers
-            binding.peersCount.text = peerIds.count().toString()
-
-            // remote peer render condition
-            peerIds.firstOrNull {
-                (it.role in listOf("host", "coHost")) && it.consumers.isNotEmpty()
-            }?.consumers?.values?.firstOrNull { it.kind == "video" }?.let { consumer ->
-                binding.camView.apply {
-                    init(PeerConnectionUtils.eglContext, null)
-                    setMirror(true)
-                    (consumer.track as? VideoTrack)?.addSink(this)
-                }
+            "${peerIds.count()}".also {
+                binding.peersCount.text = it
             }
-
+            val myPeer = store.me.value
+            if (myPeer?.peerId == "host") return@observe
+            val hostTrack =
+                myPeer?.myConsumedTracks?.values?.firstOrNull { it.kind() == "video" } as? VideoTrack
+            if (hostTrack != null) {
+                binding.camView.release()
+                binding.camView.init(PeerConnectionUtils.eglContext, null)
+                hostTrack.addSink(binding.camView)
+            }
         }
     }
 
@@ -91,15 +92,14 @@ class LiveRoomChatActivity : AppCompatActivity() {
         Timber.i("Mic Button Pressed")
         val huddleClient = (applicationContext as Application).huddleClient
         lifecycleScope.launch {
-            val isMicOn = intent.getBooleanExtra("isMicOn", false)
             if (isMicOn) {
-                huddleClient.localPeer.disableAudio()
+                huddleClient.localPeer.muteMic()
                 binding.btnMic.setImageResource(R.drawable.icon_mic_off)
             } else {
-                huddleClient.localPeer.enableAudio()
+                huddleClient.localPeer.unMuteMic()
                 binding.btnMic.setImageResource(R.drawable.icon_mic_on)
             }
-            intent.putExtra("isMicOn", !isMicOn)
+            isMicOn = !isMicOn
         }
     }
 
@@ -107,7 +107,6 @@ class LiveRoomChatActivity : AppCompatActivity() {
         Timber.i("Camera Button Pressed")
         val huddleClient = (applicationContext as Application).huddleClient
         lifecycleScope.launch {
-            val isCamOn = intent.getBooleanExtra("isCamOn", false)
             if (isCamOn) {
                 huddleClient.localPeer.disableVideo(binding.camView)
                 binding.btnCam.setImageResource(R.drawable.icon_video_off)
@@ -115,7 +114,7 @@ class LiveRoomChatActivity : AppCompatActivity() {
                 huddleClient.localPeer.enableVideo(binding.camView)
                 binding.btnCam.setImageResource(R.drawable.icon_video_on)
             }
-            intent.putExtra("isCamOn", !isCamOn)
+            isCamOn = !isCamOn
         }
     }
 
@@ -133,8 +132,12 @@ class LiveRoomChatActivity : AppCompatActivity() {
                 huddleClient.leaveRoom()
             }
         }
-        startActivity(Intent(this, Application::class.java))
-        finish()
+        val intent: Intent = Intent(
+            this,
+            HomeActivity::class.java
+        )
+        finishAffinity()
+        startActivity(intent)
     }
 
     private fun requestPermissionsIfNeeded() {
@@ -154,5 +157,12 @@ class LiveRoomChatActivity : AppCompatActivity() {
         isPermissionGranted = permissions.all { it.value }
         val message = if (isPermissionGranted) "Permission Granted" else "Permission Denied"
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycleScope.launch {
+            huddleClient.leaveRoom()
+        }
     }
 }
