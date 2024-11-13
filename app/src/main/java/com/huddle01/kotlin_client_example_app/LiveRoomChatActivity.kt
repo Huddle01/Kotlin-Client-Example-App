@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.huddle01.kotlin_client.HuddleClient
 import com.huddle01.kotlin_client.live_data.store.RoomStore
 import com.huddle01.kotlin_client.live_data.store.models.Peer
+import com.huddle01.kotlin_client.models.enum_class.RoomStates
 import com.huddle01.kotlin_client.utils.PeerConnectionUtils
 import com.huddle01.kotlin_client_example_app.databinding.ActivityLiveRoomChatBinding
 import kotlinx.coroutines.launch
@@ -79,6 +80,16 @@ class LiveRoomChatActivity : AppCompatActivity() {
                 hostTrack.addSink(binding.camView)
             }
         }
+        store.roomInfo.observe(this) { roomInfo ->
+            if (roomInfo.connectionState == RoomStates.CLOSED) {
+                val intent: Intent = Intent(
+                    this,
+                    HomeActivity::class.java
+                )
+                finishAffinity()
+                startActivity(intent)
+            }
+        }
     }
 
     private fun setButtonListeners() {
@@ -132,12 +143,12 @@ class LiveRoomChatActivity : AppCompatActivity() {
                 huddleClient.leaveRoom()
             }
         }
-        val intent: Intent = Intent(
-            this,
-            HomeActivity::class.java
-        )
-        finishAffinity()
-        startActivity(intent)
+//        val intent: Intent = Intent(
+//            this,
+//            HomeActivity::class.java
+//        )
+//        finishAffinity()
+//        startActivity(intent)
     }
 
     private fun requestPermissionsIfNeeded() {
