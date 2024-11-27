@@ -1,0 +1,120 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="huddleStore"
+            type="com.huddle01.kotlin_client.live_data.store.HuddleStore" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/hostLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <org.webrtc.SurfaceViewRenderer
+            android:id="@+id/cam_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/message_input_layout"
+            android:gravity="center" />
+
+
+        <LinearLayout
+            android:id="@+id/icon_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/peers_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/icon_peers"
+                android:contentDescription="@string/peers" />
+
+            <TextView
+                android:id="@+id/peers_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/_0"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:textColor="#fb6b4b" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/cam_functions_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@id/message_input_layout"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp">
+
+            <ImageButton
+                android:visibility="visible"
+                android:id="@+id/btnMic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/mic"
+                android:padding="8dp"
+                android:src="@drawable/icon_mic_on" />
+
+            <ImageButton
+                android:visibility="visible"
+                android:id="@+id/btnCam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/cam"
+                android:padding="8dp"
+                android:src="@drawable/icon_video_on" />
+
+            <ImageButton
+                android:visibility="visible"
+                android:id="@+id/btnSwitchCam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/switch_cam"
+                android:padding="8dp"
+                android:src="@drawable/switch_cam" />
+
+            <ImageButton
+                android:id="@+id/btnLeave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/leave"
+                android:padding="8dp"
+                android:src="@drawable/icon_leave"
+                app:tint="#5d261a" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/message_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:elevation="4dp"
+            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:padding="0dp">
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

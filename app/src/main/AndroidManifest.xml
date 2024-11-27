@@ -29,6 +29,9 @@
         android:theme="@style/Theme.KotlinClientExampleApp"
         tools:targetApi="31">
         <activity
+            android:name=".LiveRoomChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".MeetingRoomActivity"
             android:exported="false" />
         <activity

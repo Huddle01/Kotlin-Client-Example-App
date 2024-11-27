@@ -3,8 +3,8 @@
 
     <data>
         <variable
-            name="roomStore"
-            type="com.huddle01.kotlin_client.live_data.store.RoomStore" />
+            name="huddleStore"
+            type="com.huddle01.kotlin_client.live_data.store.HuddleStore" />
     </data>
 
     <RelativeLayout
