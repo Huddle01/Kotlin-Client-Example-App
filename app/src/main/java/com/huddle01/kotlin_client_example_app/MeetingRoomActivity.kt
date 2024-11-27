@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.huddle01.kotlin_client.live_data.store.RoomStore
+import com.huddle01.kotlin_client.live_data.store.HuddleStore
 import com.huddle01.kotlin_client.utils.PeerConnectionUtils
 import com.huddle01.kotlin_client_example_app.databinding.ActivityMeetingRoomBinding
 import kotlinx.coroutines.launch
@@ -22,7 +22,6 @@ import timber.log.Timber
 
 class MeetingRoomActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMeetingRoomBinding
-    private lateinit var store: RoomStore
     private var isPermissionGranted: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,8 +31,7 @@ class MeetingRoomActivity : AppCompatActivity() {
         setContentView(binding.root)
         val huddleClient = (applicationContext as Application).huddleClient
         checkPermissions()
-        store = huddleClient.localPeer.store
-        binding.roomStore = store
+        binding.huddleStore = HuddleStore
         binding.lifecycleOwner = this
         binding.bottomNavigation.itemIconTintList = null
 
@@ -41,7 +39,7 @@ class MeetingRoomActivity : AppCompatActivity() {
         val scrollableContainer: LinearLayout = binding.scrollableContainer
         "meeting roomId: ${huddleClient.roomId} 🆔".also { binding.toolbarTitle.text = it }
 
-        var peerIds = store.peers.value?.allPeers ?: emptyList()
+        var peerIds = HuddleStore.peers.value?.allPeers ?: emptyList()
         fun updateScrollableContainer() {
             scrollableContainer.removeAllViews()
 
@@ -105,7 +103,7 @@ class MeetingRoomActivity : AppCompatActivity() {
 
         updateScrollableContainer()
 
-        store.peers.observe(this) {
+        HuddleStore.peers.observe(this) {
             peerIds = it.allPeers
             updateScrollableContainer()
         }

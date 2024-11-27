@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.huddle01.kotlin_client.HuddleClient
-import com.huddle01.kotlin_client.live_data.store.RoomStore
+import com.huddle01.kotlin_client.live_data.store.HuddleStore
 import com.huddle01.kotlin_client.live_data.store.models.Peer
 import com.huddle01.kotlin_client.models.enum_class.RoomStates
 import com.huddle01.kotlin_client.utils.PeerConnectionUtils
@@ -22,7 +22,6 @@ import timber.log.Timber
 
 class LiveRoomChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLiveRoomChatBinding
-    private lateinit var store: RoomStore
     private lateinit var peerIds: List<Peer>
     private lateinit var huddleClient: HuddleClient
 
@@ -47,10 +46,9 @@ class LiveRoomChatActivity : AppCompatActivity() {
 
     private fun initializeHuddleClient() {
         huddleClient = (applicationContext as Application).huddleClient
-        store = huddleClient.localPeer.store
-        binding.roomStore = store
+        binding.huddleStore = HuddleStore
         binding.lifecycleOwner = this
-        peerIds = store.peers.value?.allPeers ?: emptyList()
+        peerIds = HuddleStore.peers.value?.allPeers ?: emptyList()
 
         if (huddleClient.localPeer.role in listOf("host", "coHost")) {
             lifecycleScope.launch {
@@ -65,12 +63,12 @@ class LiveRoomChatActivity : AppCompatActivity() {
     }
 
     private fun observeRoomData() {
-        store.peers.observe(this) { it ->
+        HuddleStore.peers.observe(this) { it ->
             peerIds = it.allPeers
             "${peerIds.count()}".also {
                 binding.peersCount.text = it
             }
-            val myPeer = store.me.value
+            val myPeer = HuddleStore.me.value
             if (myPeer?.peerId == "host") return@observe
             val hostTrack =
                 myPeer?.myConsumedTracks?.values?.firstOrNull { it.kind() == "video" } as? VideoTrack
@@ -80,7 +78,7 @@ class LiveRoomChatActivity : AppCompatActivity() {
                 hostTrack.addSink(binding.camView)
             }
         }
-        store.roomInfo.observe(this) { roomInfo ->
+        HuddleStore.roomInfo.observe(this) { roomInfo ->
             if (roomInfo.connectionState == RoomStates.CLOSED) {
                 val intent: Intent = Intent(
                     this,
@@ -143,12 +141,7 @@ class LiveRoomChatActivity : AppCompatActivity() {
                 huddleClient.leaveRoom()
             }
         }
-//        val intent: Intent = Intent(
-//            this,
-//            HomeActivity::class.java
-//        )
-//        finishAffinity()
-//        startActivity(intent)
+
     }
 
     private fun requestPermissionsIfNeeded() {
