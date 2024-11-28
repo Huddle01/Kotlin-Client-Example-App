@@ -22,8 +22,9 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val huddleClient = (applicationContext as Application).huddleClient
+        val store = huddleClient.localPeer.store
 
-        HuddleStore.roomInfo.observe(this) { roomInfo ->
+        store.roomInfo.observe(this) { roomInfo ->
             if (roomInfo.connectionState == RoomStates.CONNECTED) {
                 val intent = Intent(this@HomeActivity, LiveRoomChatActivity::class.java)
                 startActivity(intent)

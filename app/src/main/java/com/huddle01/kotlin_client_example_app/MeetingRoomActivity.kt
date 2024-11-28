@@ -22,6 +22,7 @@ import timber.log.Timber
 
 class MeetingRoomActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMeetingRoomBinding
+    private lateinit var store: HuddleStore
     private var isPermissionGranted: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +32,8 @@ class MeetingRoomActivity : AppCompatActivity() {
         setContentView(binding.root)
         val huddleClient = (applicationContext as Application).huddleClient
         checkPermissions()
-        binding.huddleStore = HuddleStore
+        store = huddleClient.localPeer.store
+        binding.huddleStore = store
         binding.lifecycleOwner = this
         binding.bottomNavigation.itemIconTintList = null
 
@@ -39,7 +41,7 @@ class MeetingRoomActivity : AppCompatActivity() {
         val scrollableContainer: LinearLayout = binding.scrollableContainer
         "meeting roomId: ${huddleClient.roomId} 🆔".also { binding.toolbarTitle.text = it }
 
-        var peerIds = HuddleStore.peers.value?.allPeers ?: emptyList()
+        var peerIds = store.peers.value?.allPeers ?: emptyList()
         fun updateScrollableContainer() {
             scrollableContainer.removeAllViews()
 
@@ -103,7 +105,7 @@ class MeetingRoomActivity : AppCompatActivity() {
 
         updateScrollableContainer()
 
-        HuddleStore.peers.observe(this) {
+        store.peers.observe(this) {
             peerIds = it.allPeers
             updateScrollableContainer()
         }

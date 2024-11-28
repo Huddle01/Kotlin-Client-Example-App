@@ -22,6 +22,7 @@ import timber.log.Timber
 
 class LiveRoomChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLiveRoomChatBinding
+    private lateinit var store: HuddleStore
     private lateinit var peerIds: List<Peer>
     private lateinit var huddleClient: HuddleClient
 
@@ -46,9 +47,10 @@ class LiveRoomChatActivity : AppCompatActivity() {
 
     private fun initializeHuddleClient() {
         huddleClient = (applicationContext as Application).huddleClient
-        binding.huddleStore = HuddleStore
+        store = huddleClient.localPeer.store
+        binding.huddleStore = store
         binding.lifecycleOwner = this
-        peerIds = HuddleStore.peers.value?.allPeers ?: emptyList()
+        peerIds = store.peers.value?.allPeers ?: emptyList()
 
         if (huddleClient.localPeer.role in listOf("host", "coHost")) {
             lifecycleScope.launch {
@@ -63,12 +65,12 @@ class LiveRoomChatActivity : AppCompatActivity() {
     }
 
     private fun observeRoomData() {
-        HuddleStore.peers.observe(this) { it ->
+        store.peers.observe(this) { it ->
             peerIds = it.allPeers
             "${peerIds.count()}".also {
                 binding.peersCount.text = it
             }
-            val myPeer = HuddleStore.me.value
+            val myPeer = store.me.value
             if (myPeer?.peerId == "host") return@observe
             val hostTrack =
                 myPeer?.myConsumedTracks?.values?.firstOrNull { it.kind() == "video" } as? VideoTrack
@@ -78,7 +80,7 @@ class LiveRoomChatActivity : AppCompatActivity() {
                 hostTrack.addSink(binding.camView)
             }
         }
-        HuddleStore.roomInfo.observe(this) { roomInfo ->
+        store.roomInfo.observe(this) { roomInfo ->
             if (roomInfo.connectionState == RoomStates.CLOSED) {
                 val intent: Intent = Intent(
                     this,
